@@ -1,39 +1,60 @@
-import { Link, Outlet } from "react-router-dom";
-import { Fragment, useState } from "react";
-import { Dialog, Menu, Transition } from "@headlessui/react";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { Fragment, useState, useEffect } from "react";
+import { Dialog, Transition } from "@headlessui/react";
 import {
   Bars3CenterLeftIcon,
-  BellIcon,
-  ClockIcon,
   CogIcon,
-  CreditCardIcon,
   DocumentChartBarIcon,
   HomeIcon,
   QuestionMarkCircleIcon,
-  ScaleIcon,
-  ShieldCheckIcon,
   UserGroupIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/20/solid";
+
+import eja from "../../assets/eja.jpeg";
+import jopa from "../../assets/jopa.jpeg";
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  let location = useLocation();
+
   const navigation = [
-    { name: "Home", href: "/profile", icon: HomeIcon, current: true },
-    { name: "Etapa 1", href: "#", icon: DocumentChartBarIcon, current: false },
-    { name: "Etapa 2", href: "#", icon: DocumentChartBarIcon, current: false },
-    { name: "Etapa 3", href: "#", icon: DocumentChartBarIcon, current: false },
-    { name: "Etapa 4", href: "#", icon: DocumentChartBarIcon, current: false },
+    {
+      name: "Home",
+      href: "/profile",
+      icon: HomeIcon,
+      current: location.pathname === "/profile",
+    },
+    {
+      name: "Etapa 1",
+      href: "/postar-atividade/1",
+      icon: DocumentChartBarIcon,
+      current: location.pathname === "/postar-atividade/1",
+    },
+    {
+      name: "Etapa 2",
+      href: "/postar-atividade/2",
+      icon: DocumentChartBarIcon,
+      current: location.pathname === "/postar-atividade/2",
+    },
+    {
+      name: "Etapa 3",
+      href: "/postar-atividade/3",
+      icon: DocumentChartBarIcon,
+      current: location.pathname === "/postar-atividade/3",
+    },
+    {
+      name: "Etapa 4",
+      href: "/postar-atividade/4",
+      icon: DocumentChartBarIcon,
+      current: location.pathname === "/postar-atividade/4",
+    },
     {
       name: "Portifolio",
-      href: "#",
+      href: "/portifolio",
       icon: UserGroupIcon,
-      current: false,
+      current: location.pathname === "/portifolio",
     },
   ];
   const secondaryNavigation = [
@@ -100,11 +121,7 @@ function Dashboard() {
                     </div>
                   </Transition.Child>
                   <div className="flex flex-shrink-0 items-center px-4">
-                    <img
-                      className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=cyan&shade=300"
-                      alt="Easywire logo"
-                    />
+                    <img className="h-12 w-auto" src={eja} alt="Logo do eja" />
                   </div>
                   <nav
                     className="mt-5 h-full flex-shrink-0 divide-y divide-cyan-800 overflow-y-auto"
@@ -163,11 +180,7 @@ function Dashboard() {
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex flex-grow flex-col overflow-y-auto bg-cyan-700 pt-5 pb-4">
             <div className="flex flex-shrink-0 items-center px-4">
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=cyan&shade=300"
-                alt="Easywire logo"
-              />
+              <img className="h-12 w-auto" src={eja} alt="eja logo" />
             </div>
             <nav
               className="mt-5 flex flex-1 flex-col divide-y divide-cyan-800 overflow-y-auto"
@@ -212,6 +225,39 @@ function Dashboard() {
                 </div>
               </div>
             </nav>
+          </div>
+        </div>
+
+        <div className="flex flex-1 flex-col lg:pl-64">
+          <div className="flex h-16 flex-shrink-0 border-b border-gray-200 bg-white lg:border-none">
+            <button
+              type="button"
+              className="border-r border-gray-200 px-4 text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500 lg:hidden"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <span className="sr-only">Open sidebar</span>
+              <Bars3CenterLeftIcon className="h-6 w-6" aria-hidden="true" />
+            </button>
+            {/* Search bar */}
+            <div className="flex flex-1 justify-between align-middle px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8">
+              <p className="flex items-center font-bold">
+                Eja - Conectando saberes 2023
+              </p>
+              <div className="ml-4 flex items-center md:ml-6">
+                <button
+                  type="button"
+                  className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
+                >
+                  <span className="sr-only">View notifications</span>
+                  <img
+                    src={jopa}
+                    alt="logo jopa"
+                    className="h-12 w-12"
+                    aria-hidden="true"
+                  />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 

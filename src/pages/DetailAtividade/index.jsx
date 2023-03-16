@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 import { api } from "../../api/api";
 
 import { PaperClipIcon } from "@heroicons/react/20/solid";
+import formatDate from "../../utils/dateFormater";
 
 function DetailAtividade() {
   const { idAtividade } = useParams();
   const [post, setPost] = useState({});
+  console.log("post", post);
 
   useEffect(() => {
     async function fetchPost() {
@@ -22,11 +24,20 @@ function DetailAtividade() {
     fetchPost();
   }, []);
 
-  console.log("post", post);
+  function findStage(stage) {
+    let ETAPAS = [
+      { etapa: 1, delivery: "31/03/2023" },
+      { etapa: 2, delivery: "31/05/2023" },
+      { etapa: 3, delivery: "30/06/2023" },
+      { etapa: 4, delivery: "06/07/2023" },
+    ];
+    let found = ETAPAS.find((cE) => cE.etapa == stage);
+    return found.delivery;
+  }
 
   return (
     <div>
-      <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols">
+      <div className="mx-auto mt-6 mb-6 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols">
         <div className="space-y-6 lg:col-span-2 lg:col-start-1">
           {/* Description list*/}
           <section aria-labelledby="applicant-information-title">
@@ -58,14 +69,16 @@ function DetailAtividade() {
                     <dt className="text-sm font-medium text-gray-500">
                       Prazo limite da entrega
                     </dt>
-                    <dd className="mt-1 text-sm text-gray-900">30/03/2022</dd>
+                    <dd className="mt-1 text-sm text-gray-900">
+                      {post.stage && findStage(post.stage)}
+                    </dd>
                   </div>
                   <div className="sm:col-span-1">
                     <dt className="text-sm font-medium text-gray-500">
                       Atividade entregue
                     </dt>
                     <dd className="mt-1 text-sm text-gray-900">
-                      {post.createdAt?.slice(0, 10)}
+                      {post.createdAt && formatDate(post.createdAt)}
                     </dd>
                   </div>
                   <div className="sm:col-span-2">
@@ -83,30 +96,15 @@ function DetailAtividade() {
                     <dd className="mt-1 text-sm text-gray-900">
                       <ul
                         role="list"
-                        className="divide-y divide-gray-200 rounded-md border border-gray-200"
+                        className="mx-auto mt-4 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3"
                       >
-                        {post.photos?.map((photo) => (
-                          <li
-                            key={photo}
-                            className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
-                          >
-                            <div className="flex w-0 flex-1 items-center">
-                              <PaperClipIcon
-                                className="h-5 w-5 flex-shrink-0 text-gray-400"
-                                aria-hidden="true"
-                              />
-                              <span className="ml-2 w-0 flex-1 truncate">
-                                {photo}
-                              </span>
-                            </div>
-                            <div className="ml-4 flex-shrink-0">
-                              <a
-                                href={photo}
-                                className="font-medium text-blue-600 hover:text-blue-500"
-                              >
-                                Download
-                              </a>
-                            </div>
+                        {post.photos?.map((photo, i) => (
+                          <li key={`${photo}${i}`}>
+                            <img
+                              className=" w-full rounded-2xl object-cover"
+                              src={photo}
+                              alt={photo}
+                            />
                           </li>
                         ))}
                       </ul>
@@ -117,9 +115,9 @@ function DetailAtividade() {
               <div>
                 <a
                   href="#"
-                  className="block bg-gray-50 px-4 py-4 text-center text-sm font-medium text-gray-500 hover:text-gray-700 sm:rounded-b-lg"
+                  className="block bg-gray-100 px-4 py-4 text-center text-sm font-medium text-gray-500 hover:text-gray-700 sm:rounded-b-lg"
                 >
-                  Ver anexos
+                  Editar Atividade
                 </a>
               </div>
             </div>

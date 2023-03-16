@@ -27,7 +27,7 @@ function App() {
               element={<ProtectedRoute component={Profile} />}
             />
             <Route
-              path="/postar-atividade"
+              path="/postar-atividade/:stage"
               element={<ProtectedRoute component={PostarAtividadePage} />}
             />
 

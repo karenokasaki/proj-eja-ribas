@@ -25,6 +25,7 @@ import {
   ChevronRightIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/20/solid";
+import formatDate from "../../utils/dateFormater";
 
 export function Profile() {
   const { setLoggedInUser } = useContext(AuthContext);
@@ -57,6 +58,17 @@ export function Profile() {
     processing: "bg-yellow-100 text-yellow-800",
     failed: "bg-gray-100 text-gray-800",
   };
+
+  function findStage(stage) {
+    let ETAPAS = [
+      { etapa: 1, delivery: "31/03/2023" },
+      { etapa: 2, delivery: "31/05/2023" },
+      { etapa: 3, delivery: "30/06/2023" },
+      { etapa: 4, delivery: "06/07/2023" },
+    ];
+    let found = ETAPAS.find((cE) => cE.etapa == stage);
+    return found.delivery;
+  }
 
   return (
     <>
@@ -230,11 +242,11 @@ export function Profile() {
                                 </span>
                               </td>
                               <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-gray-500">
-                                <time>30/03/2022</time>
+                                <time>{findStage(post.stage)}</time>
                               </td>
                               <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-gray-500">
                                 <time dateTime={post.createdAt}>
-                                  {post.createdAt?.slice(0, 10)}
+                                  {post.createdAt && formatDate(post.createdAt)}
                                 </time>
                               </td>
                             </tr>
