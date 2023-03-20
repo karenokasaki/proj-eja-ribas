@@ -2,6 +2,7 @@ import { useEffect, useReducer, useState } from "react";
 import { api } from "../../api/api";
 import formatDate from "../../utils/dateFormater";
 import { useParams } from "react-router-dom";
+import findStage from "../../utils/findStagge";
 
 function PortifolioPage() {
   const [posts, setPosts] = useState([]);
@@ -24,22 +25,16 @@ function PortifolioPage() {
     fetchPosts();
   }, []);
 
-  function findStage(stage) {
-    let ETAPAS = [
-      { etapa: 1, delivery: "31/03/2023" },
-      { etapa: 2, delivery: "31/05/2023" },
-      { etapa: 3, delivery: "30/06/2023" },
-      { etapa: 4, delivery: "06/07/2023" },
-    ];
-    let found = ETAPAS.find((cE) => cE.etapa == stage);
-    return found.delivery;
-  }
-
   return (
-    <>
+    <div>
       <h1 className="text-4xl text-white py-4 block text-center mt-6 font-bold tracking-tight bg-teal-700">
         Portifolio {user}
       </h1>
+      <div className="flex justify-center mt-4">
+        <button className="inline-flex items-center rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600">
+          Gerar PDF
+        </button>
+      </div>
       {!isLoading && posts.length > 0 && (
         <>
           <div className="mx-auto mt-6 mb-6 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols">
@@ -138,7 +133,7 @@ function PortifolioPage() {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }
 

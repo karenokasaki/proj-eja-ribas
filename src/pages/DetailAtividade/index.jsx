@@ -1,18 +1,20 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { api } from "../../api/api";
-import { DocumentIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { TrashIcon } from "@heroicons/react/24/outline";
 import PDFViewer from "../../components/PDFViewer";
 
 import formatDate from "../../utils/dateFormater";
+import findStage from "../../utils/findStagge";
 
 function DetailAtividade() {
   const { idAtividade } = useParams();
-  const [post, setPost] = useState({});
-  const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
+
+  const [showForm, setShowForm] = useState(false);
   const [reload, setReload] = useState(true);
 
+  const [post, setPost] = useState({});
   const [imgs, setImgs] = useState([]);
   const [pdfs, setPdfs] = useState([]);
   const [form, setForm] = useState({
@@ -103,23 +105,6 @@ function DetailAtividade() {
     }
   }
 
-  async function handleDeletePdf(i, url) {
-    let clone = [...pdfs];
-    clone.splice(i, 1);
-    setPdfs(clone);
-
-    try {
-      const publicId = url.split("/").slice(-1)[0].split(".")[0];
-
-      const response = await api.delete(
-        `/upload-image/delete-image/${publicId}`
-      );
-    } catch (error) {
-      console.log(error);
-      alert("Algo deu errado");
-    }
-  }
-
   async function handleFileChange(event) {
     const formData = new FormData();
     formData.append("file", event.target.files[0]);
@@ -135,15 +120,21 @@ function DetailAtividade() {
     event.target.value = "";
   }
 
-  function findStage(stage) {
-    let ETAPAS = [
-      { etapa: 1, delivery: "31/03/2023" },
-      { etapa: 2, delivery: "31/05/2023" },
-      { etapa: 3, delivery: "30/06/2023" },
-      { etapa: 4, delivery: "06/07/2023" },
-    ];
-    let found = ETAPAS.find((cE) => cE.etapa == stage);
-    return found.delivery;
+  async function handleDeletePdf(i, url) {
+    let clone = [...pdfs];
+    clone.splice(i, 1);
+    setPdfs(clone);
+
+    try {
+      const publicId = url.split("/").slice(-1)[0].split(".")[0];
+
+      const response = await api.delete(
+        `/upload-image/delete-image/${publicId}`
+      );
+    } catch (error) {
+      console.log(error);
+      alert("Algo deu errado");
+    }
   }
 
   return (
