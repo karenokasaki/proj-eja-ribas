@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const apiURLs = {
-  development: "http://localhost:8000",
-  production: "LINK DA SUA API DEPLOYADA AQUI!",
+  development: "http://192.168.1.10:8000",
+  production: "http://localhost:8000",
 };
 
 const api = axios.create({ baseURL: apiURLs[process.env.NODE_ENV] });

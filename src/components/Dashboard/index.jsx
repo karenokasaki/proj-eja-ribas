@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect, useContext } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   Bars3CenterLeftIcon,
@@ -13,10 +13,13 @@ import {
 
 import eja from "../../assets/eja.jpeg";
 import jopa from "../../assets/jopa.jpeg";
+import { AuthContext } from "../../contexts/authContext";
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const { loggedInUser } = useContext(AuthContext);
+  const formattedUsername = loggedInUser?.user.name.replace(/\s+/g, "-");
   let location = useLocation();
 
   const navigation = [
@@ -52,7 +55,7 @@ function Dashboard() {
     },
     {
       name: "Portifolio",
-      href: "/portifolio",
+      href: `/portifolio/${loggedInUser?.user._id}/${formattedUsername}`,
       icon: UserGroupIcon,
       current: location.pathname === "/portifolio",
     },
@@ -64,6 +67,10 @@ function Dashboard() {
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
+  }
+
+  function handleMenu(e) {
+    setSidebarOpen(false);
   }
   return (
     <>
@@ -130,6 +137,7 @@ function Dashboard() {
                     <div className="space-y-1 px-2">
                       {navigation.map((item) => (
                         <Link
+                          onClick={handleMenu}
                           key={item.name}
                           to={item.href}
                           className={classNames(
@@ -151,9 +159,10 @@ function Dashboard() {
                     <div className="mt-6 pt-6">
                       <div className="space-y-1 px-2">
                         {secondaryNavigation.map((item) => (
-                          <a
+                          <Link
                             key={item.name}
-                            href={item.href}
+                            to={item.href}
+                            onClick={handleMenu}
                             className="group flex items-center rounded-md px-2 py-2 text-base font-medium text-cyan-100 hover:bg-cyan-600 hover:text-white"
                           >
                             <item.icon
@@ -161,8 +170,17 @@ function Dashboard() {
                               aria-hidden="true"
                             />
                             {item.name}
-                          </a>
+                          </Link>
                         ))}
+                        {loggedInUser?.user.role === "ADMIN" && (
+                          <Link
+                            to={"/admin"}
+                            onClick={handleMenu}
+                            className="group flex items-center rounded-md px-2 py-2 text-base font-medium text-cyan-100 hover:bg-cyan-600 hover:text-white"
+                          >
+                            Painel do Admin
+                          </Link>
+                        )}
                       </div>
                     </div>
                   </nav>
@@ -222,6 +240,16 @@ function Dashboard() {
                       {item.name}
                     </Link>
                   ))}
+
+                  {loggedInUser?.user.role === "ADMIN" && (
+                    <Link
+                      to={"/admin"}
+                      onClick={handleMenu}
+                      className="group flex items-center rounded-md px-2 py-2 text-base font-medium text-cyan-100 hover:bg-cyan-600 hover:text-white"
+                    >
+                      Painel do Admin
+                    </Link>
+                  )}
                 </div>
               </div>
             </nav>

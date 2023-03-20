@@ -57,6 +57,18 @@ function EditProfilePage() {
         photo:
           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYE2EOfj-iQsL0fUlsZ1GxmRBpN0XJhpVZ3UEZi1Q8SBGkseVjrlwl4IO7aOTraRAeClU&usqp=CAU",
       });
+
+      try {
+        const publicId = user.photo.split("/").slice(-1)[0].split(".")[0];
+
+        const response = await api.delete(
+          `/upload-image/delete-image/${publicId}`
+        );
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+        alert("Algo deu errado");
+      }
     } catch (error) {
       console.log(error);
     }

@@ -24,20 +24,7 @@ export function Home() {
     {
       id: 1,
       person: "Almira Rodrigues da Mata",
-      about:
-        "You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
-    },
-    {
-      id: 2,
-      person: "Outra pessoa",
-      about:
-        "You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
-    },
-    {
-      id: 3,
-      person: "Outra pessoa",
-      about:
-        "You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
+      about: "Coordenadora do programa.",
     },
   ];
   const footerNavigation = {
@@ -143,12 +130,12 @@ export function Home() {
               ))}
             </div>
             <div className="hidden lg:flex lg:items-center lg:space-x-6">
-              <a
-                href="#"
+              <Link
+                to="/login"
                 className="rounded-md border border-transparent bg-white bg-opacity-10 py-2 px-6 text-base font-medium text-white hover:bg-opacity-20"
               >
                 Entrar
-              </a>
+              </Link>
             </div>
           </nav>
 
@@ -192,14 +179,12 @@ export function Home() {
                         {item.name}
                       </button>
                     ))}
-                  </div>
-                  <div className="mt-6 px-5">
-                    <a
-                      href="#"
-                      className="block w-full rounded-md border border-transparent bg-green-400 py-2 px-4 text-center font-medium text-white shadow hover:bg-green-500"
+                    <Link
+                      to="/login"
+                      className="block rounded-md px-3 py-2 text-base font-medium text-stone-900 hover:bg-stone-50"
                     >
                       Entrar
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -325,7 +310,7 @@ export function Home() {
                 <button
                   type="submit"
                   onClick={handleSubmit}
-                  className="mt-12 rounded-md border border-transparent bg-green-700 bg-opacity-2 py-2 px-6 text-base font-medium text-white hover:bg-opacity-80"
+                  className="mt-4 rounded-md border border-transparent bg-green-700 bg-opacity-2 py-2 px-6 text-base font-medium text-white hover:bg-opacity-80"
                 >
                   Cadastrar
                 </button>

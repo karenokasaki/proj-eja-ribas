@@ -11,6 +11,9 @@ import DetailAtividade from "./pages/DetailAtividade";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import Dashboard from "./components/Dashboard";
 import EditProfilePage from "./pages/EditProfilePage";
+import PortifolioPage from "./pages/PortifolioPage";
+import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
+import AdminPage from "./pages/AdminPage";
 
 function App() {
   return (
@@ -40,7 +43,17 @@ function App() {
               path="/editar-perfil"
               element={<ProtectedRoute component={EditProfilePage} />}
             />
+
+            <Route
+              path="/admin"
+              element={<ProtectedAdminRoute component={AdminPage} />}
+            />
           </Route>
+
+          <Route
+            path="/portifolio/:idUser/:userName"
+            element={<PortifolioPage />}
+          />
 
           <Route path="*" element={<Error />} />
         </Routes>

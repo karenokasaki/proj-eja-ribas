@@ -2,36 +2,22 @@ import { useContext, useEffect, useState, Fragment } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../../api/api";
 import { AuthContext } from "../../contexts/authContext";
-import { Dialog, Menu, Transition } from "@headlessui/react";
+
 import {
-  Bars3CenterLeftIcon,
-  BellIcon,
-  ClockIcon,
-  CogIcon,
-  CreditCardIcon,
-  DocumentChartBarIcon,
-  HomeIcon,
-  QuestionMarkCircleIcon,
-  ScaleIcon,
-  ShieldCheckIcon,
-  UserGroupIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import {
-  BanknotesIcon,
   BuildingOfficeIcon,
   CheckCircleIcon,
-  ChevronDownIcon,
   ChevronRightIcon,
-  MagnifyingGlassIcon,
 } from "@heroicons/react/20/solid";
 import formatDate from "../../utils/dateFormater";
 
 export function Profile() {
-  const { setLoggedInUser } = useContext(AuthContext);
+  const { setLoggedInUser, loggedInUser } = useContext(AuthContext);
   const [user, setUser] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [reload, setReload] = useState(true);
   const navigate = useNavigate();
+
+  const formattedUsername = loggedInUser?.user.name.replace(/\s+/g, "-");
 
   useEffect(() => {
     async function fetchUser() {
@@ -41,12 +27,23 @@ export function Profile() {
     }
 
     fetchUser();
-  }, []);
+  }, [reload]);
 
   function handleLogOut() {
     localStorage.removeItem("loggedInUser");
     setLoggedInUser(null);
     navigate("/");
+  }
+
+  async function handleVisible(e, id) {
+    try {
+      const response = await api.put(`/posts/${id}`, {
+        visible: e.target.checked,
+      });
+      setReload(!reload);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   function classNames(...classes) {
@@ -121,17 +118,11 @@ export function Profile() {
                   </div>
                   <div className="mt-6 flex space-x-3 md:mt-0 md:ml-4">
                     <Link
-                      to="/postar-atividade"
-                      className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                    >
-                      Postar Atividade
-                    </Link>
-                    <button
-                      type="button"
                       className="inline-flex items-center rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
+                      to={`/portifolio/${user._id}/${formattedUsername}`}
                     >
                       Ver Portifolio
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -185,6 +176,12 @@ export function Profile() {
                         <thead>
                           <tr>
                             <th
+                              className="bg-gray-50 px-3 py-3 text-center text-sm font-semibold text-gray-900"
+                              scope="col"
+                            >
+                              Visível
+                            </th>
+                            <th
                               className="bg-gray-50 px-6 py-3 text-left text-sm font-semibold text-gray-900"
                               scope="col"
                             >
@@ -203,13 +200,13 @@ export function Profile() {
                               Etapa
                             </th>
                             <th
-                              className="bg-gray-50 px-6 py-3 text-right text-sm font-semibold text-gray-900"
+                              className="bg-gray-50 px-6 py-3 text-center text-sm font-semibold text-gray-900"
                               scope="col"
                             >
                               Prazo
                             </th>
                             <th
-                              className="bg-gray-50 px-6 py-3 text-right text-sm font-semibold text-gray-900"
+                              className="bg-gray-50 px-6 py-3 text-center text-sm font-semibold text-gray-900"
                               scope="col"
                             >
                               Entrega
@@ -219,6 +216,16 @@ export function Profile() {
                         <tbody className="divide-y divide-gray-200 bg-white">
                           {user.posts?.map((post) => (
                             <tr key={post._id} className="bg-white">
+                              <td className="whitespace-nowrap px-3 py-4 text-left text-sm text-gray-500">
+                                <span className="font-medium text-gray-900 grid justify-items-center">
+                                  <input
+                                    type="checkbox"
+                                    checked={post.visible}
+                                    className="h-4 w-4  rounded border-gray-300 text-emerald-600 focus:ring-emerald-600"
+                                    onChange={(e) => handleVisible(e, post._id)}
+                                  />
+                                </span>
+                              </td>
                               <td className="whitespace-nowrap px-6 py-4 text-left text-sm text-gray-500">
                                 <span className="font-medium text-gray-900">
                                   <Link to={`/atividade/${post._id}`}>
@@ -254,6 +261,10 @@ export function Profile() {
                         </tbody>
                       </table>
                     </div>
+                    <p className="text-sm text-slate-500">
+                      As atividades visíveis poderão ser vistas em seu
+                      portifólio.
+                    </p>
                   </div>
                 </div>
               </div>
