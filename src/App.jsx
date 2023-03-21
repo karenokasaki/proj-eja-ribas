@@ -4,24 +4,26 @@ import { Error } from "./pages/Error";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Profile } from "./pages/Profile";
-import { Signup } from "./pages/Signup";
 import PostarAtividadePage from "./pages/PostarAtividadePage";
+import PortifolioPage from "./pages/PortifolioPage";
 import DetailAtividade from "./pages/DetailAtividade";
+import AdminPage from "./pages/AdminPage";
+import EditProfilePage from "./pages/EditProfilePage";
 
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import Dashboard from "./components/Dashboard";
-import EditProfilePage from "./pages/EditProfilePage";
-import PortifolioPage from "./pages/PortifolioPage";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
-import AdminPage from "./pages/AdminPage";
+
+import { Toaster } from "react-hot-toast";
+import MyPDF from "./pages/MyPDF";
 
 function App() {
   return (
     <>
       <AuthContextComponent>
+        <Toaster position="top-right" reverseOrder={false} />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/sign-up" element={<Signup />} />
           <Route path="/login" element={<Login />} />
 
           <Route path="/" element={<Dashboard />}>
@@ -42,6 +44,11 @@ function App() {
             <Route
               path="/editar-perfil"
               element={<ProtectedRoute component={EditProfilePage} />}
+            />
+
+            <Route
+              path="/:idUser/pdf"
+              element={<ProtectedRoute component={MyPDF} />}
             />
 
             <Route

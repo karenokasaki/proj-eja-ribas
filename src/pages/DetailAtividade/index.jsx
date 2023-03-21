@@ -1,14 +1,18 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { api } from "../../api/api";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import PDFViewer from "../../components/PDFViewer";
 
 import formatDate from "../../utils/dateFormater";
 import findStage from "../../utils/findStagge";
+import { AuthContext } from "../../contexts/authContext";
+import { toast } from "react-hot-toast";
 
 function DetailAtividade() {
   const { idAtividade } = useParams();
+  const { loggedInUser } = useContext(AuthContext);
+  console.log("loggedInUser", loggedInUser);
   const navigate = useNavigate();
 
   const [showForm, setShowForm] = useState(false);
@@ -34,7 +38,8 @@ function DetailAtividade() {
         setPdfs(response.data.pdf);
       } catch (error) {
         console.log(error);
-        alert(error);
+        toast.error("Não foi possível obter as informações");
+        navigate("/profile");
       }
     }
 
@@ -49,8 +54,10 @@ function DetailAtividade() {
     try {
       await api.delete(`/posts/${idAtividade}`);
       navigate("/profile");
+      toast.success("Atividade apagada com sucesso");
     } catch (error) {
       console.log(error);
+      toast.error("Atividade não foi apagada");
     }
   }
 
@@ -66,8 +73,10 @@ function DetailAtividade() {
       navigate(`/atividade/${response.data._id}`);
       setShowForm(false);
       setReload(!reload);
+      toast.success("Atividade atualizada");
     } catch (error) {
       console.log(error);
+      toast.error("Atividade não foi atualizada");
     }
   }
 
@@ -80,10 +89,10 @@ function DetailAtividade() {
       const response = await api.post("/upload-image", uploadData);
       setImgs([...imgs, response.data.url]);
 
-      alert("Foto adiciona com sucesso");
+      toast.success("Foto adicionada.");
     } catch (error) {
       console.log(error);
-      alert("Algo deu errado");
+      toast.error("Algo deu errado");
     }
   }
 
@@ -95,13 +104,11 @@ function DetailAtividade() {
     try {
       const publicId = url.split("/").slice(-1)[0].split(".")[0];
 
-      const response = await api.delete(
-        `/upload-image/delete-image/${publicId}`
-      );
-      console.log(response);
+      await api.delete(`/upload-image/delete-image/${publicId}`);
+      toast.success("Foto deletada");
     } catch (error) {
       console.log(error);
-      alert("Algo deu errado");
+      toast.error("Algo deu errado");
     }
   }
 
@@ -111,13 +118,19 @@ function DetailAtividade() {
     formData.append("upload_preset", "ml_default");
     formData.append("resource_type", "auto");
 
-    const response = await api.post("/upload-image/pdf", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    setPdfs([...pdfs, response.data.url]);
-    event.target.value = "";
+    try {
+      const response = await api.post("/upload-image/pdf", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setPdfs([...pdfs, response.data.url]);
+      event.target.value = "";
+      toast.success("PDF adicionado");
+    } catch (error) {
+      console.log(error);
+      toast.error("PDF não pôde ser adicionado.");
+    }
   }
 
   async function handleDeletePdf(i, url) {
@@ -128,12 +141,11 @@ function DetailAtividade() {
     try {
       const publicId = url.split("/").slice(-1)[0].split(".")[0];
 
-      const response = await api.delete(
-        `/upload-image/delete-image/${publicId}`
-      );
+      await api.delete(`/upload-image/delete-image/${publicId}`);
+      toast.success("PDF excluído");
     } catch (error) {
       console.log(error);
-      alert("Algo deu errado");
+      toast.error("Erro ao deletar o PDF");
     }
   }
 
@@ -242,20 +254,22 @@ function DetailAtividade() {
                     )}
                   </dl>
                 </div>
-                <div className="flex ">
-                  <button
-                    onClick={handleDelete}
-                    className="block bg-rose-100 px-4 py-4 text-center text-sm font-medium text-gray-500 hover:text-gray-700 sm:rounded-b-lg"
-                  >
-                    Deletar Atividade
-                  </button>
-                  <button
-                    onClick={() => setShowForm(!showForm)}
-                    className="block grow bg-gray-100 px-4 py-4 text-center text-sm font-medium text-gray-500 hover:text-gray-700 sm:rounded-b-lg"
-                  >
-                    Editar Atividade
-                  </button>
-                </div>
+                {loggedInUser?.user._id === post?.user?._id && (
+                  <div className="flex ">
+                    <button
+                      onClick={handleDelete}
+                      className="block bg-rose-100 px-4 py-4 text-center text-sm font-medium text-gray-500 hover:text-gray-700 sm:rounded-b-lg"
+                    >
+                      Deletar Atividade
+                    </button>
+                    <button
+                      onClick={() => setShowForm(!showForm)}
+                      className="block grow bg-gray-100 px-4 py-4 text-center text-sm font-medium text-gray-500 hover:text-gray-700 sm:rounded-b-lg"
+                    >
+                      Editar Atividade
+                    </button>
+                  </div>
+                )}
               </div>
             </section>
           )}

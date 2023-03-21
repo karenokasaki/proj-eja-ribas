@@ -5,6 +5,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import eja from "../../assets/eja.jpeg";
 import jopa from "../../assets/jopa.jpeg";
 import { api } from "../../api/api";
+import { toast } from "react-hot-toast";
 
 export function Home() {
   const coordRef = useRef(null);
@@ -20,6 +21,7 @@ export function Home() {
   });
 
   const navigation = [{ name: "Cadastre-se" }, { name: "Coordenação" }];
+  
   const collabs = [
     {
       id: 1,
@@ -76,14 +78,16 @@ export function Home() {
     e.preventDefault();
 
     try {
-      await api.post("/users/sign-up", { ...form });
-
+      const response = await api.post("/users/sign-up", { ...form });
       navigate("/login");
+      toast.success(
+        `${response.data.name} seu cadastro foi feito com sucesso!`
+      );
     } catch (error) {
       console.log(error);
+      toast.error(`Por favor digite email, senha e telefone válidos`);
     }
   }
-  console.log(form);
   return (
     <div className="bg-white">
       <header className="relative bg-sky-800 pb-24 sm:pb-32">
@@ -235,6 +239,7 @@ export function Home() {
                       </label>
                       <div className="mt-2">
                         <input
+                          required
                           id="formName"
                           name="name"
                           type="text"

@@ -4,6 +4,7 @@ import { api } from "../../api/api";
 import { AuthContext } from "../../contexts/authContext";
 import eja from "../../assets/eja.jpeg";
 import jopa from "../../assets/jopa.jpeg";
+import { toast } from "react-hot-toast";
 
 export function Login() {
   const [form, setForm] = useState({
@@ -28,9 +29,10 @@ export function Login() {
       localStorage.setItem("loggedInUser", JSON.stringify(response.data));
 
       navigate("/profile");
+      toast.success(`Bem vinda(o) ${response.data.user.name}`);
     } catch (error) {
       console.log(error.response.data.msg);
-      alert(error.response.data.msg);
+      toast.error(error.response.data.msg);
     }
   }
 

@@ -1,14 +1,16 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../api/api";
 import formatDate from "../../utils/dateFormater";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import findStage from "../../utils/findStagge";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import MyPDF from "../MyPDF";
 
 function PortifolioPage() {
   const [posts, setPosts] = useState([]);
 
   const [user, setUser] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { userName, idUser } = useParams();
 
   useEffect(() => {
@@ -31,9 +33,12 @@ function PortifolioPage() {
         Portifolio {user}
       </h1>
       <div className="flex justify-center mt-4">
-        <button className="inline-flex items-center rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600">
+        <Link
+          to={`/${idUser}/pdf`}
+          className="inline-flex items-center rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
+        >
           Gerar PDF
-        </button>
+        </Link>
       </div>
       {!isLoading && posts.length > 0 && (
         <>

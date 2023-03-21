@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { api } from "../../api/api";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import PDFViewer from "../../components/PDFViewer";
 import findStage from "../../utils/findStagge";
+import { toast } from "react-hot-toast";
 
 function PostarAtividadePage() {
   const { stage } = useParams();
@@ -31,10 +32,7 @@ function PostarAtividadePage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-
-
   async function handleUpload(e) {
-    console.log("handleupdate");
     try {
       const uploadData = new FormData();
       uploadData.append("picture", e.target.files[0]);
@@ -42,10 +40,10 @@ function PostarAtividadePage() {
       const response = await api.post("/upload-image", uploadData);
       setImgs([...imgs, response.data.url]);
 
-      alert("Foto adiciona com sucesso");
+      toast.success("Foto adiciona com sucesso");
     } catch (error) {
       console.log(error);
-      alert("Algo deu errado");
+      toast.error("Algo deu errado");
     }
   }
 
@@ -59,8 +57,10 @@ function PostarAtividadePage() {
       });
       console.log(response);
       navigate(`/atividade/${response.data._id}`);
+      toast.success("Atividade criada com sucesso");
     } catch (error) {
       console.log(error);
+      toast.error("Por favor preencha todos os campos!");
     }
   }
 
@@ -72,13 +72,12 @@ function PostarAtividadePage() {
     try {
       const publicId = url.split("/").slice(-1)[0].split(".")[0];
 
-      const response = await api.delete(
-        `/upload-image/delete-image/${publicId}`
-      );
-      console.log(response);
+      await api.delete(`/upload-image/delete-image/${publicId}`);
+
+      toast.success("Foto deletada");
     } catch (error) {
       console.log(error);
-      alert("Algo deu errado");
+      toast.error("A foto não foi deletada");
     }
   }
 
@@ -89,13 +88,18 @@ function PostarAtividadePage() {
     formData.append("resource_type", "auto");
 
     console.log(formData);
-
-    const response = await api.post("/upload-image/pdf", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    setPdf([...pdf, response.data.url]);
+    try {
+      const response = await api.post("/upload-image/pdf", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setPdf([...pdf, response.data.url]);
+      toast.success("PDF adicionado com sucesso");
+    } catch (error) {
+      console.log(error);
+      toast.error("Erro no upload da foto");
+    }
   }
 
   async function handleDeletePdf(i, url) {
@@ -106,12 +110,11 @@ function PostarAtividadePage() {
     try {
       const publicId = url.split("/").slice(-1)[0].split(".")[0];
 
-      const response = await api.delete(
-        `/upload-image/delete-image/${publicId}`
-      );
+      await api.delete(`/upload-image/delete-image/${publicId}`);
+      toast.success("PDF excluído");
     } catch (error) {
       console.log(error);
-      alert("Algo deu errado");
+      toast.error("Erro ao deletar o PDF");
     }
   }
 
@@ -350,12 +353,13 @@ function PostarAtividadePage() {
 
           <div className="pt-5">
             <div className="flex justify-end gap-x-3">
-              <button
+              <Link
+                to="/profile"
                 type="button"
                 className="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
               >
                 Cancelar
-              </button>
+              </Link>
               <button
                 type="submit"
                 className="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
