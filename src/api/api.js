@@ -2,7 +2,7 @@ import axios from "axios";
 
 const apiURLs = {
   development: "http://192.168.1.11:8000",
-  production: "http://localhost:8000",
+  production: "https://real-rose-wasp-garb.cyclic.app",
 };
 
 const api = axios.create({ baseURL: apiURLs[process.env.NODE_ENV] });
