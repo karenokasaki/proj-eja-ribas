@@ -3,8 +3,7 @@ import { api } from "../../api/api";
 import formatDate from "../../utils/dateFormater";
 import { Link, useParams } from "react-router-dom";
 import findStage from "../../utils/findStagge";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import MyPDF from "../MyPDF";
+import { DocumentIcon } from "@heroicons/react/24/outline";
 
 function PortifolioPage() {
   const [posts, setPosts] = useState([]);
@@ -48,6 +47,7 @@ function PortifolioPage() {
                 posts
                   .filter((post) => post.visible)
                   .map((post) => {
+                    console.log(post);
                     return (
                       <section
                         key={post._id}
@@ -109,7 +109,7 @@ function PortifolioPage() {
                               </div>
                               <div className="sm:col-span-2">
                                 <dt className="text-sm font-medium text-gray-500">
-                                  Anexos
+                                  Imagens
                                 </dt>
                                 <dd className="mt-1 text-sm text-gray-900">
                                   <ul
@@ -123,6 +123,37 @@ function PortifolioPage() {
                                           src={photo}
                                           alt={photo}
                                         />
+                                        <small className="">
+                                          Imagem {i + 1}
+                                        </small>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </dd>
+                              </div>
+                              <div className="sm:col-span-2">
+                                <dt className="text-sm font-medium text-gray-500">
+                                  Anexos
+                                </dt>
+                                <dd className="mt-1 text-sm text-gray-900">
+                                  <ul
+                                    role="list"
+                                    className="mx-auto mt-4 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none "
+                                  >
+                                    {post.pdf?.map((pdf, i) => (
+                                      <li key={`${pdf}${i}`}>
+                                        <a
+                                          className=""
+                                          href={pdf}
+                                          target="_blank"
+                                        >
+                                          <span>
+                                            <DocumentIcon className="h-12 w-12" />
+                                            <small className="">
+                                              PDF {i + 1}
+                                            </small>
+                                          </span>
+                                        </a>
                                       </li>
                                     ))}
                                   </ul>

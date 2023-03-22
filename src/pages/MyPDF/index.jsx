@@ -7,11 +7,11 @@ import {
   StyleSheet,
   PDFViewer,
   Image,
+  Link,
 } from "@react-pdf/renderer";
 import { useParams } from "react-router-dom";
 import { api } from "../../api/api";
 import formatDate from "../../utils/dateFormater";
-import teste from "../../assets/eja.jpeg";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
   image: {
     marginHorizontal: 12,
-    width: "500px",
+    width: "200px",
   },
   header: {
     fontSize: 12,
@@ -63,13 +63,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: "justify",
   },
+  pdf: {
+    fontSize: 8,
+  },
 });
 
 // Create Document Component
 function MyPDF() {
   const { idUser } = useParams();
   const [posts, setPosts] = useState([]);
-  console.log("idUser", idUser);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -129,8 +131,11 @@ function MyPDF() {
                               marginHorizontal: 12,
                             }}
                           >
-                            Anexo {i + 1}
+                            Imagem {i + 1}
                           </Text>
+                          <Link style={styles.pdf} src={photo}>
+                            {photo}
+                          </Link>
                           <Image
                             style={styles.image}
                             src={{
@@ -140,6 +145,32 @@ function MyPDF() {
                               body: "",
                             }}
                           />
+                        </div>
+                      );
+                    })}
+                  </View>
+                  <View
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginTop: 12,
+                    }}
+                  >
+                    {post.pdf?.map((pdf, i) => {
+                      return (
+                        <div key={pdf + i}>
+                          <Text
+                            style={{
+                              marginLeft: "12px",
+                              fontSize: "10px",
+                              marginHorizontal: 12,
+                            }}
+                          >
+                            Anexo {i + 1}
+                          </Text>
+                          <Link style={styles.pdf} src={pdf}>
+                            {pdf}
+                          </Link>
                         </div>
                       );
                     })}

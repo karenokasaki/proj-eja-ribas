@@ -16,6 +16,7 @@ import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 
 import { Toaster } from "react-hot-toast";
 import MyPDF from "./pages/MyPDF";
+import AjudaPage from "./pages/AjudaPage";
 
 function App() {
   return (
@@ -49,6 +50,11 @@ function App() {
             <Route
               path="/:idUser/pdf"
               element={<ProtectedRoute component={MyPDF} />}
+            />
+
+            <Route
+              path="/ajuda"
+              element={<ProtectedRoute component={AjudaPage} />}
             />
 
             <Route

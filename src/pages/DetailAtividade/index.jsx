@@ -51,12 +51,15 @@ function DetailAtividade() {
   }
 
   async function handleDelete(e) {
+    let toastId = toast.loading("Apagando sua atividade. Aguarde alguns segundos!");
     try {
       await api.delete(`/posts/${idAtividade}`);
       navigate("/profile");
+      toast.dismiss(toastId);
       toast.success("Atividade apagada com sucesso");
     } catch (error) {
       console.log(error);
+      toast.dismiss(toastId);
       toast.error("Atividade não foi apagada");
     }
   }
@@ -165,7 +168,7 @@ function DetailAtividade() {
                     {post.title}
                   </h2>
                   <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                    {post.theme}
+                    {post.theme} - {post.areaOfKnowledge}
                   </p>
                 </div>
                 <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
@@ -222,11 +225,14 @@ function DetailAtividade() {
                           >
                             {post.photos?.map((photo, i) => (
                               <li key={`${photo}${i}`}>
-                                <img
-                                  className=" w-full rounded-2xl object-cover"
-                                  src={photo}
-                                  alt={photo}
-                                />
+                                <a href={photo} target="_blank">
+                                  <img
+                                    className=" w-full rounded-2xl object-cover"
+                                    src={photo}
+                                    alt={photo}
+                                  />
+                                </a>
+                                <small className="">Imagem {i + 1}</small>
                               </li>
                             ))}
                           </ul>
@@ -246,6 +252,7 @@ function DetailAtividade() {
                             {post.pdf?.map((pdf, i) => (
                               <li key={`${pdf}${i}`}>
                                 <PDFViewer url={pdf}></PDFViewer>
+                                <small className="">PDF {i + 1}</small>
                               </li>
                             ))}
                           </ul>
@@ -348,10 +355,14 @@ function DetailAtividade() {
                                 defaultValue={form.areaOfKnowledge}
                               >
                                 <option>Selecione uma opção</option>
-                                <option>linguagens</option>
-                                <option>ciências humanas</option>
-                                <option>ciências da natureza</option>
-                                <option>matemática</option>
+                                <option value="linguagens">Linguagens</option>
+                                <option value="ciências humanas">
+                                  Ciências Humanas
+                                </option>
+                                <option value="ciências da natureza">
+                                  Ciências da Natureza
+                                </option>
+                                <option value="matemática">Matemática</option>
                               </select>
                             </div>
                           </div>

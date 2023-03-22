@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { api } from "../../api/api";
+import { toast } from "react-hot-toast";
 
 function EditProfilePage() {
   const [user, setUser] = useState({});
@@ -29,9 +30,10 @@ function EditProfilePage() {
       await api.put("/users/profile/update", {
         photo: response.data.url,
       });
-      alert("Foto adiciona com sucesso");
+      toast.success("Foto adiciona com sucesso");
     } catch (error) {
       console.log(error);
+      toast.error(error);
     }
   }
 
@@ -39,9 +41,10 @@ function EditProfilePage() {
     e.preventDefault();
     try {
       const response = await api.put("/users/profile/update", user);
-      console.log(response);
+      toast.success("Perfil atualizado com sucesso");
     } catch (error) {
       console.log(error);
+      toast.error(error);
     }
   }
 
@@ -64,10 +67,10 @@ function EditProfilePage() {
         const response = await api.delete(
           `/upload-image/delete-image/${publicId}`
         );
-        console.log(response);
+        toast.success("Foto deletada");
       } catch (error) {
         console.log(error);
-        alert("Algo deu errado");
+        toast.error("Algo deu errado");
       }
     } catch (error) {
       console.log(error);

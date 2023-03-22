@@ -118,6 +118,7 @@ function PostarAtividadePage() {
     }
   }
 
+
   return (
     <div className="mt-6 mb-6 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols">
       <div className="bg-white shadow sm:rounded-lg">
@@ -190,10 +191,12 @@ function PostarAtividadePage() {
                       onChange={handleChange}
                     >
                       <option>Selecione uma opção</option>
-                      <option>linguagens</option>
-                      <option>ciências humanas</option>
-                      <option>ciências da natureza</option>
-                      <option>matemática</option>
+                      <option value="linguagens">Linguagens</option>
+                      <option value="ciências humanas">Ciências Humanas</option>
+                      <option value="ciências da natureza">
+                        Ciências da Natureza
+                      </option>
+                      <option value="matemática">Matemática</option>
                     </select>
                   </div>
                 </div>

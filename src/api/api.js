@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiURLs = {
-  development: "http://192.168.1.11:8000",
+  development: "http://localhost:8000",
   production: "https://real-rose-wasp-garb.cyclic.app",
 };
 
