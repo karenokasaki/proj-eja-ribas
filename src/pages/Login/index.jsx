@@ -22,6 +22,7 @@ export function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    let toastedId = toast.loading("Aguarde...");
     try {
       const response = await api.post("/users/login", form);
 
@@ -29,9 +30,11 @@ export function Login() {
       localStorage.setItem("loggedInUser", JSON.stringify(response.data));
 
       navigate("/profile");
+      toast.dismiss(toastedId);
       toast.success(`Bem vinda(o) ${response.data.user.name}`);
     } catch (error) {
       console.log(error.response.data.msg);
+      toast.dismiss(toastedId);
       toast.error(error.response.data.msg);
     }
   }
